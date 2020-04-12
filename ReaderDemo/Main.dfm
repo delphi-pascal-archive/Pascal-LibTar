@@ -1,9 +1,9 @@
 object FrmMain: TFrmMain
   Left = 236
   Top = 156
-  Width = 783
-  Height = 540
   Caption = 'TAR File "Explorer"'
+  ClientHeight = 481
+  ClientWidth = 767
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,36 +13,37 @@ object FrmMain: TFrmMain
   Menu = MnuMain
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object ToolBar: TToolBar
     Left = 0
     Top = 0
-    Width = 775
+    Width = 767
     Height = 49
     BorderWidth = 2
     ButtonHeight = 36
-    ButtonWidth = 74
+    ButtonWidth = 68
     Caption = 'ToolBar'
     Images = IglToolBar
     ShowCaptions = True
     TabOrder = 0
     object ToolButton1: TToolButton
       Left = 0
-      Top = 2
+      Top = 0
       Action = ActFileOpen
     end
     object ToolButton2: TToolButton
-      Left = 74
-      Top = 2
+      Left = 68
+      Top = 0
       Action = ActExtract
     end
   end
   object LvwFiles: TListView
     Left = 0
     Top = 49
-    Width = 775
-    Height = 418
+    Width = 767
+    Height = 413
     Align = alClient
     Columns = <
       item
@@ -80,8 +81,8 @@ object FrmMain: TFrmMain
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 467
-    Width = 775
+    Top = 462
+    Width = 767
     Height = 19
     Panels = <
       item

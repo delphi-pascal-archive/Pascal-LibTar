@@ -16,9 +16,11 @@ unit Main;
 interface
 
 uses
+
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ImgList, ComCtrls, ToolWin, ActnList,
-  LibTar;
+  LibTar, Actions, ImageList;
+
 
 type
   TFrmMain = class(TForm)
@@ -43,7 +45,9 @@ type
     procedure ActExitExecute(Sender: TObject);
     procedure ActFileOpenExecute(Sender: TObject);
     procedure ActExtractExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
+    FShortDateFormatStr:String;
   public
   end;
 
@@ -86,7 +90,7 @@ begin
         Item := LvwFiles.Items.Add;
         Item.Caption := string (DirRec.Name);
         Item.SubItems.Add (IntToStr (DirRec.Size));
-        Item.SubItems.Add (FormatDateTime (ShortDateFormat + ' HH:NN:SS', DirRec.DateTime));
+        Item.SubItems.Add (FormatDateTime (FShortDateFormatStr + ' HH:NN:SS', DirRec.DateTime));
         Item.SubItems.Add (PermissionString (DirRec.Permissions) + ' ' + FILETYPE_NAME [DirRec.FileType]);
         Item.SubItems.Add (IntToStr (DirRec.UID)+'-'+string (DirRec.UserName) + ' / ' +
                            IntToStr (DirRec.GID)+'-'+string (DirRec.GroupName));
@@ -106,6 +110,32 @@ begin
     END;
   StatusBar.Panels[0].Text := IntToStr (LvwFiles.Items.Count) + ' Files';
   StatusBar.Panels[1].Text := IntToStr (Bytes) + ' Bytes';
+end;
+
+procedure TFrmMain.FormCreate(Sender: TObject);
+begin
+
+  // http://docwiki.embarcadero.com/RADStudio/Rio/en/Compiler_Versions
+
+  // < VER150
+  {$IF CompilerVersion < 15.0}
+     FShortDateFormatStr := ShortDateFormat;
+  {$ENDIF}
+
+  //VER150  - VER210
+  // On older versions (D7+) use:
+  {$IF (CompilerVersion >= 15.0) AND (CompilerVersion <= 21.0)}
+     GetLocaleFormatSettings(GetThreadLocale, FormatSettings);
+     FShortDateFormatStr := Formatsettings.ShortDateFormat;
+  {$ENDIF}
+
+  //VER220 - VER330
+  //And in newer versions (XE+):
+  {$IF CompilerVersion > 21.0 }
+     FormatSettings := TFormatSettings.Create(GetThreadLocale);
+     FShortDateFormatStr := Formatsettings.ShortDateFormat;
+  {$ENDIF}
+
 end;
 
 procedure TFrmMain.ActExtractExecute(Sender: TObject);
